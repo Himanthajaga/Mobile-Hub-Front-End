@@ -1,7 +1,8 @@
 // import './App.css';
 import {BrowserRouter, Route, Routes} from "react-router-dom";
-import {Login} from "./view/pages/Login/Login.tsx";
+import {Login} from "./view/pages/Auth/Login.tsx";
 import {DefaultLayout} from "./view/common/DefaultLayout/DefaultLayout.tsx";
+import React from "react";
 
 function App() {
     return (
