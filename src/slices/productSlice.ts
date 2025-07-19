@@ -32,13 +32,14 @@ const productSlice = createSlice({
     extraReducers:(builder) => {
 
 //Async Response pending
-        builder.addCase(getAllProducts.pending, () => {
+        builder.addCase(getAllProducts.pending, (state: ProductState) => {
             alert("Product data is still loading...");
+            state.error = null; // Reset error state
 // Async Response Complete State
-        }) .addCase(getAllProducts.fulfilled, (state, action) => {
+        }) .addCase(getAllProducts.fulfilled,(state:ProductState, action) => {
             state.list = action.payload;
 // Async Response Failure State
-        }) .addCase(getAllProducts.rejected, (state, action) => {
+        }) .addCase(getAllProducts.rejected, (state:ProductState, action:any) => {
             state.error = action.error.message;
             alert("Error loading :" + state.error);
         })

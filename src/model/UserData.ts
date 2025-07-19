@@ -1,6 +1,4 @@
-export interface UserData {
-    id: string;
-    name: string;
-    email: string;
-    role: string;
+export interface UserData{
+    username: string | null;
+    role: string | null;
 }

@@ -25,14 +25,15 @@ const orderSlice = createSlice({
     reducers: {},
     extraReducers: (builder) => {
         builder
-            .addCase(fetchOrders.pending, (state) => {
+            .addCase(fetchOrders.pending, (state: OrderState) => {
                 state.status = "loading";
+                state.error = null; // Reset error on new fetch
             })
-            .addCase(fetchOrders.fulfilled, (state, action) => {
+            .addCase(fetchOrders.fulfilled, (state: OrderState, action) => {
                 state.status = "success";
-                state.orders = action.payload;
+                state.orders = await action.payload;
             })
-            .addCase(fetchOrders.rejected, (state, action) => {
+            .addCase(fetchOrders.rejected, (state: OrderState, action:any) => {
                 state.status = "error";
                 state.error = action.error.message || "Failed to fetch orders.";
             });

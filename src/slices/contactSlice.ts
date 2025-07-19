@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import type { ContactData } from "../model/ContactData.ts";
-import { backendApi } from "../api.ts";
+import type { ContactData } from "../model/ContactData";
+import { backendApi } from "../api";
 
 interface ContactState {
     status: "idle" | "loading" | "success" | "error";
@@ -26,14 +26,14 @@ const contactSlice = createSlice({
     reducers: {},
     extraReducers: (builder) => {
         builder
-            .addCase(submitContactForm.pending, (state) => {
+            .addCase(submitContactForm.pending, (state: ContactState) => {
                 state.status = "loading";
                 state.error = null;
             })
-            .addCase(submitContactForm.fulfilled, (state) => {
+            .addCase(submitContactForm.fulfilled, (state: ContactState) => {
                 state.status = "success";
             })
-            .addCase(submitContactForm.rejected, (state, action) => {
+            .addCase(submitContactForm.rejected, (state: ContactState, action:any) => {
                 state.status = "error";
                 state.error = action.error.message || "Failed to submit the form.";
             });
