@@ -25,14 +25,14 @@ const userSlice = createSlice({
     reducers: {},
     extraReducers: (builder) => {
         builder
-            .addCase(fetchUsers.pending, (state) => {
+            .addCase(fetchUsers.pending, (state:UserState) => {
                 state.status = "loading";
             })
-            .addCase(fetchUsers.fulfilled, (state, action) => {
+            .addCase(fetchUsers.fulfilled, (state:UserState, action:any) => {
                 state.status = "success";
                 state.users = action.payload;
             })
-            .addCase(fetchUsers.rejected, (state, action) => {
+            .addCase(fetchUsers.rejected, (state:UserState, action:any) => {
                 state.error = action.error.message || "Failed to fetch users.";
             });
     },

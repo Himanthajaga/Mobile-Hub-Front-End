@@ -19,25 +19,25 @@ export function Navbar() {
     return (
         <div className="p-2 bg-[#444544] flex justify-between items-center">
             <div className="flex items-center p-2">
-                <h1 className="text-3xl text-[#e6f0e6] hover:text-green-400">
-                    Organic Shop
+                <h1 className="text-3xl text-[#e6f0e6] hover:text-green-400 font-bold">
+                    Mobile Hub
                 </h1>
                 <img className="h-[2.5rem] w-[2.5rem] ml-2" src={icon} alt="" />
             </div>
-            <ul className="list-none flex gap-4 mt-2 mb-2">
+            <ul className="list-none flex gap-20 mt-1 mb-2">
                 {/* Customer-only links */}
                 {role === 'customer' && (
                     <>
-                        <li className="text-[1.9rem] text-[#e6f0e6] hover:text-green-400">
+                        <li className="text-[1.5rem] text-[#e6f0e6] hover:text-green-400">
                             <Link to="/">Home</Link>
                         </li>
-                        <li className="text-[1.9rem] text-[#e6f0e6] hover:text-green-400">
+                        <li className="text-[1.5rem] text-[#e6f0e6] hover:text-green-400">
                             <Link to="/about">About</Link>
                         </li>
-                        <li className="text-[1.9rem] text-[#e6f0e6] hover:text-green-400">
+                        <li className="text-[1.5rem] text-[#e6f0e6] hover:text-green-400">
                             <Link to="/contact">Contact</Link>
                         </li>
-                        <li className="text-[1.9rem] text-[#e6f0e6] hover:text-green-400">
+                        <li className="text-[1.5rem] text-[#e6f0e6] hover:text-green-400">
                             <Link to="/shopping-cart">My-Cart</Link>
                         </li>
                     </>
@@ -46,11 +46,14 @@ export function Navbar() {
                 {/* Admin-only links */}
                 {role === 'admin' && (
                     <>
-                        <li className="text-[1.9rem] text-[#e6f0e6] hover:text-green-400">
+                        <li className="text-[1.5rem] text-[#e6f0e6] hover:text-green-400 ">
                             <Link to="/admin-panel">Admin Panel</Link>
                         </li>
-                        <li className="text-[1.9rem] text-[#e6f0e6] hover:text-green-400">
+                        <li className="text-[1.5rem] text-[#e6f0e6] hover:text-green-400">
                             <Link to="/manage-products">Manage Products</Link>
+                        </li>
+                        <li className="text-[1.5rem] text-[#e6f0e6] hover:text-green-400">
+                            <Link to="/manage-category">Manage Category</Link>
                         </li>
                     </>
                 )}

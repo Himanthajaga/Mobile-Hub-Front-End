@@ -14,7 +14,7 @@ export function Home() {
         , []);
     return (
         <div>
-            <div className="flex flex-wrap ml-[1px] mt-5 mb-5
+            <div className="flex flex-wrap ml-[1px] mt-6 mb-5
                             justify-center items-center mx-auto">
                 {
                     list.map((product) => (

@@ -6,8 +6,11 @@ import {Contact} from "../../pages/Contact/Contact.tsx";
 import {ShoppingCart} from "../../pages/ShoppingCart/ShoppingCart.tsx";
 import {ProtectedRoute} from "../../../auth/ProtectedRoute.tsx";
 import {AdminPanel} from "../../pages/AdminPanel/AdminPanel.tsx";
-import {ManageProducts} from "../../pages/ManageProducts/ManageProducts.tsx";
+import {AddProduct} from "../../pages/AddProducts/AddProducts.tsx";
 import {useEffect, useState} from "react";
+import {ManageCategory} from "../../pages/ManageCategory/ManageCategory.tsx";
+import {ManageProducts} from "../../pages/ManageProducts/ManageProducts.tsx";
+import {AddCategory} from "../../pages/AddCategory/AddCategory.tsx";
 
 export function MainContent() {
     const [role, setRole] = useState<string | null>(null);
@@ -18,8 +21,7 @@ export function MainContent() {
     }, []);
 
     return (
-        <div className="flex justify-center
-                       items-center min-h-screen">
+        <div className="flex min-h-screen flex-col bg-[#f0f0f0]">
             <Routes>
                 {/* Routes visible to non-admins only */}
                 {role === 'customer' && (
@@ -34,6 +36,21 @@ export function MainContent() {
                     <Route path="/admin-panel" element={
                         <ProtectedRoute allowedRoles={['admin']}>
                             <AdminPanel/>
+                        </ProtectedRoute>
+                    }/>
+                    <Route path="/add-product" element={
+                        <ProtectedRoute allowedRoles={['admin']}>
+                            <AddProduct/>
+                        </ProtectedRoute>
+                    }/>
+                    <Route path="/add-category" element={
+                        <ProtectedRoute allowedRoles={['admin']}>
+                            <AddCategory/>
+                        </ProtectedRoute>
+                    }/>
+                    <Route path="/manage-category" element={
+                        <ProtectedRoute allowedRoles={['admin']}>
+                            <ManageCategory/>
                         </ProtectedRoute>
                     }/>
                     <Route path="/manage-products" element={
