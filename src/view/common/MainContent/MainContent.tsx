@@ -30,6 +30,11 @@ export function MainContent() {
                         <Route path="/about" element={<About/>}/>
                         <Route path="/contact" element={<Contact/>}/>
                         <Route path="/shopping-cart" element={<ShoppingCart/>}/>
+                        <Route path="/payment/addPayment" element={
+                            <ProtectedRoute allowedRoles={['customer']}>
+                                <ShoppingCart/>
+                            </ProtectedRoute>
+                        }/>
                     </>
                 )}
                 <>

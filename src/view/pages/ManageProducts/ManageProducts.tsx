@@ -1,20 +1,25 @@
-import { useEffect } from "react";
+import {useEffect, useState} from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import type { AppDispatch, RootState } from "../../../store/store.ts";
 import { deleteProduct, getAllProducts } from "../../../slices/productSlice.ts";
+import {getAllCategories} from "../../../slices/categorySlice.ts";
 
 export function ManageProducts() {
     const navigate = useNavigate();
     const dispatch = useDispatch<AppDispatch>();
     const { list } = useSelector((state: RootState) => state.products);
     const categories = useSelector((state: RootState) => state.category.list || []);
-
+    const [isLoading, setIsLoading] = useState(true);
     useEffect(() => {
         // Fetch products and categories
-        dispatch(getAllProducts());
+        const fetchData = async () => {
+            await dispatch(getAllCategories());
+            await dispatch(getAllProducts());
+            setIsLoading(false); // Set loading to false after data is fetched
+        };
+        fetchData();
     }, [dispatch]);
-
     const handleDelete = async (id: string) => {
        if (window.confirm("Are you sure you want to delete this product?")) {
             try {
@@ -32,11 +37,18 @@ export function ManageProducts() {
     };
 
     // Helper function to get category name by ID
-    const getCategoryName = (categoryId: string) => {
-        const category = categories.find((cat) => cat.id === categoryId);
-        return category ? category.name : "Unknown Category";
+    const getCategoryName = (category: string | { name: string }) => {
+        if (typeof category === "string") {
+            const foundCategory = categories.find((cat) => cat.name === category || cat.id === category);
+            return foundCategory ? foundCategory.name : "Unknown Category";
+        } else if (typeof category === "object" && category.name) {
+            return category.name;
+        }
+        return "Unknown Category";
     };
-
+    if (isLoading) {
+        return <div>Loading...</div>; // Show a loading indicator while data is being fetched
+    }
     return (
         <div className="p-4">
             <div className="flex justify-between items-center mb-4">

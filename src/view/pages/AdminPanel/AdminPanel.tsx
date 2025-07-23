@@ -1,15 +1,37 @@
-import { useEffect } from "react";
+import {useEffect, useState} from "react";
 import { getAllProducts } from "../../../slices/productSlice.ts";
 import { useDispatch, useSelector } from "react-redux";
 import type { AppDispatch, RootState } from "../../../store/store.ts";
+import { getAllCategories } from "../../../slices/categorySlice.ts";
 
 export function AdminPanel() {
     const dispatch = useDispatch<AppDispatch>();
     const { list } = useSelector((state: RootState) => state.products);
-
+    const categories = useSelector((state: RootState) => state.category.list || []);
+    const [isLoading, setIsLoading] = useState(true);
     useEffect(() => {
-        dispatch(getAllProducts());
+        // Fetch products and categories
+        const fetchData = async () => {
+            await dispatch(getAllCategories());
+            await dispatch(getAllProducts());
+            setIsLoading(false); // Set loading to false after data is fetched
+        };
+        fetchData();
     }, [dispatch]);
+
+    // Helper function to get category name by ID
+    const getCategoryName = (category: string | { name: string }) => {
+        if (typeof category === "string") {
+            const foundCategory = categories.find((cat) => cat.name === category || cat.id === category);
+            return foundCategory ? foundCategory.name : "Unknown Category";
+        } else if (typeof category === "object" && category.name) {
+            return category.name;
+        }
+        return "Unknown Category";
+    };
+    if (isLoading) {
+        return <div>Loading...</div>; // Show a loading indicator while data is being fetched
+    }
 
     return (
         <div>
@@ -24,7 +46,7 @@ export function AdminPanel() {
                     >
                         <h3 className="text-lg font-bold">{product.name}</h3>
                         <p className="text-sm text-gray-600">
-                            {product.category?.name || "Unknown Category"}
+                            {getCategoryName(product.category)}
                         </p>
                         {product.image ? (
                             <img

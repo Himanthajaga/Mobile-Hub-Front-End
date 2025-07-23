@@ -13,5 +13,19 @@ export const isTokenExpired = (token: string) => {
     }
 };
 export function getUserFromToken(token: string): UserData {
-    return jwtDecode<UserData>(token);
+    try {
+        console.log("Decoding token:", token);
+        const decodedToken = jwtDecode<any>(token);
+        console.log("Decoded user data:", decodedToken);
+
+        // Map `id` to `userId` for compatibility
+        return {
+            userId: decodedToken.id,
+            username: decodedToken.username,
+            role: decodedToken.role,
+        };
+    } catch (error) {
+        console.error("Error decoding token:", error);
+        return { userId: null, username: null, role: null }; // Return default values if decoding fails
+    }
 }

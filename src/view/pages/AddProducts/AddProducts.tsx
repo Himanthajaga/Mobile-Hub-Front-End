@@ -37,7 +37,11 @@ export function AddProduct() {
     useEffect(() => {
         dispatch(getAllCategories());
         if (location.state && location.state.product) {
-            setFormData(location.state.product);
+            const product = location.state.product;
+            setFormData({
+                ...product,
+                category: typeof product.category === "object" ? product.category.id : product.category,
+            });
         }
     }, [location.state]);
 
@@ -106,7 +110,12 @@ export function AddProduct() {
             return;
 
         }
-
+            // Find the category name from the selected category ID
+            const selectedCategory = categories.find((cat) => cat.id === formData.category);
+            if (!selectedCategory) {
+                console.error("Selected category not found");
+                return;
+            }
 
             const formPayload = {
                 id: formData.id || undefined,
@@ -114,7 +123,7 @@ export function AddProduct() {
                 price: formData.price,
                 currency: formData.currency,
                 description: formData.description,
-                category: formData.category,
+                category: selectedCategory.name,
                 image: formData.image,
             };
 

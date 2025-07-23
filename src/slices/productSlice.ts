@@ -20,7 +20,9 @@ export const getAllProducts = createAsyncThunk(
     'product/getAllProducts',
     async () => {
         const response = await backendApi.get("/products/all");
+        console.log("Response received at getAllProducts endpoint", response.data);
         return await response.data;
+        console.error("Error fetching products:", response.data);
     }
 )
 export const addProduct = createAsyncThunk(
