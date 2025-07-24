@@ -2,7 +2,7 @@
 import icon from '../../../assets/keels.jpg';
 import {Link, useNavigate} from "react-router-dom";
 import {useEffect, useState} from "react";
-
+import { FaCog } from "react-icons/fa"; // Import a settings icon from react-icons
 export function Navbar() {
 
     const [username, setUsername] = useState<string | null>(null);
@@ -86,6 +86,10 @@ export function Navbar() {
                                 className="h-[2.5rem] w-[2.5rem] rounded-full"
                             />
                         )}
+                        <FaCog
+                            className="text-2xl text-white cursor-pointer hover:text-green-400"
+                            onClick={() => navigate("/account-settings")}
+                        />
                         <button
                             onClick={handleLogout}
                             className="text-[1.5rem] text-[#e6f0e6] bg-red-600 py-0.5 px-2

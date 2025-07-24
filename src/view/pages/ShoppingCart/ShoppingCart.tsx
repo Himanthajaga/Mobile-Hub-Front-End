@@ -6,12 +6,14 @@ import type { RootState, AppDispatch } from "../../../store/store";
 import { addPayment } from "../../../slices/paymentSlice";
 import {getUserFromToken, isTokenExpired} from "../../../auth/auth.ts";
 import {jwtDecode} from "jwt-decode";
+import {useNavigate} from "react-router-dom";
 const stripePromise = loadStripe("pk_test_51R6ZgFKiBxldEfFS2fX0YC3riyZE1M5C8oFqG239MAcBiLl6TqyoKtzPsqiiXEV5ilYkqRYHvn8hnvqY5EdNfR8L00weOUntYV");
 
 const CheckoutForm = ({ totalAmount }: { totalAmount: number }) => {
     const stripe = useStripe();
     const elements = useElements();
     const dispatch = useDispatch<AppDispatch>();
+    const navigate = useNavigate();
 
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
@@ -47,21 +49,21 @@ const CheckoutForm = ({ totalAmount }: { totalAmount: number }) => {
                 return;
             }
 
+            // Create a PaymentIntent on the backend
             const paymentData = {
                 amount: totalAmount,
                 currency: "LKR",
                 paymentMethod: "card",
                 status: "PENDING",
-                userId, // Use the decoded userId
+                userId,
                 createdAt: new Date(),
-                transactionId: "txn_12345", // Replace with actual transaction ID
-                paymentId: "pay_12345", // Replace with actual payment ID
             };
             console.log("Payment data to be sent:", paymentData);
             const result = await dispatch(addPayment(paymentData)).unwrap();
 
             console.log("PaymentIntent created successfully:", result);
 
+            // Confirm the payment with Stripe
             const { paymentIntent, error } = await stripe.confirmCardPayment(result.clientSecret, {
                 payment_method: {
                     card: cardNumberElement,
@@ -73,12 +75,39 @@ const CheckoutForm = ({ totalAmount }: { totalAmount: number }) => {
                 alert("Payment failed!");
             } else if (paymentIntent?.status === "succeeded") {
                 console.log("Payment successful:", paymentIntent);
+
+                // Extract transactionId and paymentId from paymentIntent
+                const transactionId = paymentIntent.id; // Stripe's PaymentIntent ID
+                const paymentId = paymentIntent.charges?.data[0]?.id; // Charge ID from the first charge
+
+                // Update the payment data with actual transactionId and paymentId
+                const updatedPaymentData = {
+                    ...paymentData,
+                    status: "COMPLETED",
+                    transactionId,
+                    paymentId,
+                };
+
+                console.log("Updated payment data to be saved:", updatedPaymentData);
+
+                // Dispatch the updated payment data to save it
+                await dispatch(addPayment(updatedPaymentData));
+
                 alert("Payment successful!");
+
+                // Clear the cart
+                dispatch({ type: "cart/clearCart" });
+
+                // Redirect to the home page
+                navigate("/");
+
+                // Optionally, reload the home page
+                window.location.reload();
             }
         } catch (error) {
             console.error("Error during payment process:", error);
         }
-    }
+    };
     return (
         <form onSubmit={handleSubmit} className="space-y-4">
             <div>

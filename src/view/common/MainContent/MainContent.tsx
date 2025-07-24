@@ -12,6 +12,7 @@ import {ManageCategory} from "../../pages/ManageCategory/ManageCategory.tsx";
 import {ManageProducts} from "../../pages/ManageProducts/ManageProducts.tsx";
 import {AddCategory} from "../../pages/AddCategory/AddCategory.tsx";
 import {Register} from "../../pages/Register/Register.tsx";
+import {AccountSettings} from "../../pages/AccountSettings/AccountSettings.tsx";
 
 export function MainContent() {
     const [role, setRole] = useState<string | null>(null);
@@ -27,10 +28,11 @@ export function MainContent() {
             <Routes>
                 {/* Register route is always accessible */}
                 <Route path="/register" element={<Register />} />
-
+                <Route path="/account-settings" element={<AccountSettings />} />
                 {/* Routes visible to non-admins only */}
                 {role === 'customer' && (
                     <>
+
                         <Route path="/" element={<Home />} />
                         <Route path="/about" element={<About />} />
                         <Route path="/contact" element={<Contact />} />

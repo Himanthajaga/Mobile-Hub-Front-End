@@ -31,8 +31,9 @@ export function Login() {
             const user:UserData = getUserFromToken(accessToken);
             localStorage.setItem('username', user.username as string);
             localStorage.setItem('role', user.role as string);
-            localStorage.setItem('userId', user.id as string);
+            localStorage.setItem('userId', user.userId as string);
             localStorage.setItem('image', response.data.user.image as string);
+            localStorage.setItem('email', user.email as string);
 
             alert("Successfully logged in!");
             if (user.role === 'customer') {

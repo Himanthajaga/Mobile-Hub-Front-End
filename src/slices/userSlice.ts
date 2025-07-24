@@ -40,7 +40,7 @@ export const updateUser = createAsyncThunk(
     "users/updateUser",
     async (user: UserData, { rejectWithValue }) => {
         try {
-            const response = await backendApi.put(`/users/update/${user.userId}`, user);
+            const response = await backendApi.put(`/auth/update/${user.userId}`, user);
             return response.data;
         } catch (error: any) {
             console.error("Backend error:", error.response?.data || error.message);

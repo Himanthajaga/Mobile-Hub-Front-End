@@ -6,7 +6,7 @@ import {useEffect} from "react"; // Import useEffect
 import {isTokenExpired} from "./auth/auth.ts";
 import {Unauthorized} from "./auth/Unauthorized.tsx";
 import {Register} from "./view/pages/Register/Register.tsx"; // Import JWT token validation
-
+import { AccountSettings } from "./view/pages/AccountSettings/AccountSettings";
 function App() {
     const navigate = useNavigate(); // Define useNavigate
 
@@ -20,6 +20,7 @@ function App() {
 
     return (
         <Routes>
+            <Route path="/account-settings" element={<AccountSettings />} />
             <Route path="/register" element={<Register/>}></Route>
             <Route path="/*" element={<DefaultLayout/>}></Route>
             <Route path="/login" element={<Login/>}></Route>
