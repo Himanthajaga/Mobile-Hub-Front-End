@@ -1,21 +1,34 @@
 // import './Navbar.css';
 import icon from '../../../assets/keels.jpg';
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {useEffect, useState} from "react";
 
 export function Navbar() {
 
     const [username, setUsername] = useState<string | null>(null);
     const [role, setRole] = useState<string | null>(null);
-
+    const [image, setImage] = useState<string | null>(null);
+    const navigate = useNavigate();
     useEffect(() => {
         // Load from localStorage when component mounts
         const storedUsername = localStorage.getItem("username");
         const storedRole = localStorage.getItem("role");
+        const storedImage = localStorage.getItem("image");
 
         setUsername(storedUsername);
         setRole(storedRole);
+        setImage(storedImage);
     }, []);
+    const handleLogout = () => {
+        // Clear user session
+        localStorage.removeItem("username");
+        localStorage.removeItem("role");
+        setUsername(null);
+        setRole(null);
+
+        // Redirect to login page
+        navigate("/login");
+    };
     return (
         <div className="p-2 bg-[#444544] flex justify-between items-center">
             <div className="flex items-center p-2">
@@ -40,6 +53,9 @@ export function Navbar() {
                         <li className="text-[1.5rem] text-[#e6f0e6] hover:text-green-400">
                             <Link to="/shopping-cart">My-Cart</Link>
                         </li>
+                        <li className="text-[1.5rem] text-[#e6f0e6] hover:text-green-400">
+                            <Link to="/register">Register</Link>
+                        </li>
                     </>
                 )}
 
@@ -61,7 +77,23 @@ export function Navbar() {
 
             <div className="flex items-center space-x-4">
                 {username ? (
-                    <p className="text-2xl text-white">{username}</p>
+                    <>
+                        <p className="text-2xl text-white">{username}</p>
+                        {image && (
+                            <img
+                                src={image}
+                                alt="User Avatar"
+                                className="h-[2.5rem] w-[2.5rem] rounded-full"
+                            />
+                        )}
+                        <button
+                            onClick={handleLogout}
+                            className="text-[1.5rem] text-[#e6f0e6] bg-red-600 py-0.5 px-2
+                            rounded-lg border-white border-2 hover:bg-red-700"
+                        >
+                            Logout
+                        </button>
+                    </>
                 ) : (
                     <Link
                         to="/login"

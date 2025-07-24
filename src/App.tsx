@@ -4,7 +4,8 @@ import {DefaultLayout} from "./view/common/DefaultLayout/DefaultLayout.tsx";
 import {Login} from "./view/pages/Login/Login.tsx";
 import {useEffect} from "react"; // Import useEffect
 import {isTokenExpired} from "./auth/auth.ts";
-import {Unauthorized} from "./auth/Unauthorized.tsx"; // Import JWT token validation
+import {Unauthorized} from "./auth/Unauthorized.tsx";
+import {Register} from "./view/pages/Register/Register.tsx"; // Import JWT token validation
 
 function App() {
     const navigate = useNavigate(); // Define useNavigate
@@ -19,6 +20,7 @@ function App() {
 
     return (
         <Routes>
+            <Route path="/register" element={<Register/>}></Route>
             <Route path="/*" element={<DefaultLayout/>}></Route>
             <Route path="/login" element={<Login/>}></Route>
             <Route path="/unauthorized" element={<Unauthorized/>}></Route> // Define Route for unauthorized access

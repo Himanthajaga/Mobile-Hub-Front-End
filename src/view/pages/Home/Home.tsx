@@ -9,9 +9,12 @@ export function Home() {
         useDispatch<AppDispatch>();
     const { list   }=useSelector((state: RootState)=> state.products);
     useEffect(() => {
+            console.log("Dispatching getAllProducts...");
             dispatch(getAllProducts())
         }
         , []);
+    // Check if the list is empty or undefined
+    console.log("Products list:", list);
     return (
         <div>
             <div className="flex flex-wrap ml-[1px] mt-6 mb-5

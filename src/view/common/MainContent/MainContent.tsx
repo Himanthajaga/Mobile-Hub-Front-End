@@ -11,9 +11,11 @@ import {useEffect, useState} from "react";
 import {ManageCategory} from "../../pages/ManageCategory/ManageCategory.tsx";
 import {ManageProducts} from "../../pages/ManageProducts/ManageProducts.tsx";
 import {AddCategory} from "../../pages/AddCategory/AddCategory.tsx";
+import {Register} from "../../pages/Register/Register.tsx";
 
 export function MainContent() {
     const [role, setRole] = useState<string | null>(null);
+
     useEffect(() => {
         // Load from localStorage when component mounts
         const storedRole = localStorage.getItem("role");
@@ -23,49 +25,60 @@ export function MainContent() {
     return (
         <div className="flex min-h-screen flex-col bg-[#f0f0f0]">
             <Routes>
+                {/* Register route is always accessible */}
+                <Route path="/register" element={<Register />} />
+
                 {/* Routes visible to non-admins only */}
                 {role === 'customer' && (
                     <>
-                        <Route path="/" element={<Home/>}/>
-                        <Route path="/about" element={<About/>}/>
-                        <Route path="/contact" element={<Contact/>}/>
-                        <Route path="/shopping-cart" element={<ShoppingCart/>}/>
+                        <Route path="/" element={<Home />} />
+                        <Route path="/about" element={<About />} />
+                        <Route path="/contact" element={<Contact />} />
+                        <Route path="/shopping-cart" element={<ShoppingCart />} />
                         <Route path="/payment/addPayment" element={
                             <ProtectedRoute allowedRoles={['customer']}>
-                                <ShoppingCart/>
+                                <ShoppingCart />
                             </ProtectedRoute>
-                        }/>
+                        } />
+                        <Route path="/payment" element={
+                            <ProtectedRoute allowedRoles={['customer']}>
+                                <ShoppingCart />
+                            </ProtectedRoute>
+                        } />
                     </>
                 )}
+
+                {/* Admin routes */}
                 <>
                     <Route path="/admin-panel" element={
                         <ProtectedRoute allowedRoles={['admin']}>
-                            <AdminPanel/>
+                            <AdminPanel />
                         </ProtectedRoute>
-                    }/>
+                    } />
                     <Route path="/add-product" element={
                         <ProtectedRoute allowedRoles={['admin']}>
-                            <AddProduct/>
+                            <AddProduct />
                         </ProtectedRoute>
-                    }/>
+                    } />
                     <Route path="/add-category" element={
                         <ProtectedRoute allowedRoles={['admin']}>
-                            <AddCategory/>
+                            <AddCategory />
                         </ProtectedRoute>
-                    }/>
+                    } />
                     <Route path="/manage-category" element={
                         <ProtectedRoute allowedRoles={['admin']}>
-                            <ManageCategory/>
+                            <ManageCategory />
                         </ProtectedRoute>
-                    }/>
+                    } />
                     <Route path="/manage-products" element={
                         <ProtectedRoute allowedRoles={['admin']}>
-                            <ManageProducts/>
+                            <ManageProducts />
                         </ProtectedRoute>
-                    }/>
+                    } />
                 </>
             </Routes>
         </div>
     );
 }
+
 export default MainContent;

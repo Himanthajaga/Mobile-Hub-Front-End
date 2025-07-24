@@ -21,6 +21,7 @@ export function Login() {
             };
 
             const response = await backendApi.post('/auth/login', userCredentials);
+            console.log("Login response:", response.data);
             const accessToken = response.data.accessToken;
             const refreshToken = response.data.refreshToken;
 
@@ -30,6 +31,8 @@ export function Login() {
             const user:UserData = getUserFromToken(accessToken);
             localStorage.setItem('username', user.username as string);
             localStorage.setItem('role', user.role as string);
+            localStorage.setItem('userId', user.id as string);
+            localStorage.setItem('image', response.data.user.image as string);
 
             alert("Successfully logged in!");
             if (user.role === 'customer') {
@@ -88,6 +91,18 @@ export function Login() {
                     >
                         Sign In
                     </button>
+                    <div className="text-sm text-center text-green-600">
+                        <p>
+                            Don't have an account?{" "}
+                            <button
+                                type="button"
+                                onClick={() => navigate("/register")}
+                                className="font-medium hover:underline"
+                            >
+                                Sign Up
+                            </button>
+                        </p>
+                    </div>
                 </form>
             </div>
         </div>

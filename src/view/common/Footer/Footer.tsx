@@ -1,8 +1,16 @@
 import { Link } from "react-router-dom";
 import logo from '../../../assets/keels.jpg';
 import logo_1 from '../../../assets/logo_1.png';
+import { useLocation } from "react-router-dom";
 
 export function Footer() {
+    const location = useLocation();
+
+    // Do not display the footer on the Register page
+    if (location.pathname === "/register") {
+        return null;
+    }
+
     return (
         <footer className="bg-white border-t border-gray-200 dark:bg-gray-900">
             <div className="max-w-screen-xl mx-auto p-4">

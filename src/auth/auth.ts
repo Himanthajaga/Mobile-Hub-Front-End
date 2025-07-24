@@ -23,6 +23,8 @@ export function getUserFromToken(token: string): UserData {
             userId: decodedToken.id,
             username: decodedToken.username,
             role: decodedToken.role,
+            email: decodedToken.email || null, // Optional field
+            image: decodedToken.image || null // Optional field
         };
     } catch (error) {
         console.error("Error decoding token:", error);
