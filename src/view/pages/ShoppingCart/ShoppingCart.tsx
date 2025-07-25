@@ -5,7 +5,6 @@ import { Elements, CardNumberElement, CardExpiryElement, CardCvcElement, useStri
 import type { RootState, AppDispatch } from "../../../store/store";
 import { addPayment } from "../../../slices/paymentSlice";
 import {getUserFromToken, isTokenExpired} from "../../../auth/auth.ts";
-import {jwtDecode} from "jwt-decode";
 import {useNavigate} from "react-router-dom";
 const stripePromise = loadStripe("pk_test_51R6ZgFKiBxldEfFS2fX0YC3riyZE1M5C8oFqG239MAcBiLl6TqyoKtzPsqiiXEV5ilYkqRYHvn8hnvqY5EdNfR8L00weOUntYV");
 
@@ -42,6 +41,7 @@ const CheckoutForm = ({ totalAmount }: { totalAmount: number }) => {
             // Decode the token to get the userId
             const userData = getUserFromToken(authToken);
             const userId = userData.userId;
+            const email = userData.email;
 
             if (!userId) {
                 console.error("User ID not found in token.");
@@ -57,6 +57,7 @@ const CheckoutForm = ({ totalAmount }: { totalAmount: number }) => {
                 status: "PENDING",
                 userId,
                 createdAt: new Date(),
+                email: email, // Include user email for confirmation
             };
             console.log("Payment data to be sent:", paymentData);
             const result = await dispatch(addPayment(paymentData)).unwrap();

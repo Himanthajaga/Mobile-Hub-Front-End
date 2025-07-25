@@ -2,7 +2,7 @@
 import icon from '../../../assets/keels.jpg';
 import {Link, useNavigate} from "react-router-dom";
 import {useEffect, useState} from "react";
-import { FaCog } from "react-icons/fa"; // Import a settings icon from react-icons
+import { FaUserCircle, FaCog, FaSignOutAlt, FaShoppingCart } from "react-icons/fa";
 export function Navbar() {
 
     const [username, setUsername] = useState<string | null>(null);
@@ -30,30 +30,30 @@ export function Navbar() {
         navigate("/login");
     };
     return (
-        <div className="p-2 bg-[#444544] flex justify-between items-center">
-            <div className="flex items-center p-2">
-                <h1 className="text-3xl text-[#e6f0e6] hover:text-green-400 font-bold">
+        <div className="p-2 bg-gradient-to-r from-green-500 to-blue-500 shadow-lg flex justify-between items-center">
+            <div className="flex items-center p-0.5">
+                <h1 className="text-3xl text-[#e6f0e6] hover:text-green-950 font-bold">
                     Mobile Hub
                 </h1>
                 <img className="h-[2.5rem] w-[2.5rem] ml-2" src={icon} alt="" />
             </div>
-            <ul className="list-none flex gap-20 mt-1 mb-2">
+            <ul className="list-none flex gap-10 mt-0.5 mb-1">
                 {/* Customer-only links */}
                 {role === 'customer' && (
                     <>
-                        <li className="text-[1.5rem] text-[#e6f0e6] hover:text-green-400">
+                        <li className="text-[1.5rem] text-[#e6f0e6] hover:text-green-950">
                             <Link to="/">Home</Link>
                         </li>
-                        <li className="text-[1.5rem] text-[#e6f0e6] hover:text-green-400">
+                        <li className="text-[1.5rem] text-[#e6f0e6] hover:text-green-950">
                             <Link to="/about">About</Link>
                         </li>
-                        <li className="text-[1.5rem] text-[#e6f0e6] hover:text-green-400">
+                        <li className="text-[1.5rem] text-[#e6f0e6] hover:text-green-950">
                             <Link to="/contact">Contact</Link>
                         </li>
-                        <li className="text-[1.5rem] text-[#e6f0e6] hover:text-green-400">
+                        <li className="text-[1.5rem] text-[#e6f0e6] hover:text-green-950">
                             <Link to="/shopping-cart">My-Cart</Link>
                         </li>
-                        <li className="text-[1.5rem] text-[#e6f0e6] hover:text-green-400">
+                        <li className="text-[1.5rem] text-[#e6f0e6] hover:text-green-950">
                             <Link to="/register">Register</Link>
                         </li>
                     </>
@@ -62,14 +62,20 @@ export function Navbar() {
                 {/* Admin-only links */}
                 {role === 'admin' && (
                     <>
-                        <li className="text-[1.5rem] text-[#e6f0e6] hover:text-green-400 ">
+                        <li className="text-[1.5rem] text-[#e6f0e6] hover:text-green-950 ">
                             <Link to="/admin-panel">Admin Panel</Link>
                         </li>
-                        <li className="text-[1.5rem] text-[#e6f0e6] hover:text-green-400">
+                        <li className="text-[1.5rem] text-[#e6f0e6] hover:text-green-950">
                             <Link to="/manage-products">Manage Products</Link>
                         </li>
-                        <li className="text-[1.5rem] text-[#e6f0e6] hover:text-green-400">
+                        <li className="text-[1.5rem] text-[#e6f0e6] hover:text-green-950">
                             <Link to="/manage-category">Manage Category</Link>
+                        </li>
+                        <li className="text-[1.5rem] text-[#e6f0e6] hover:text-green-950">
+                            <Link to="/payments">Payments</Link>
+                        </li>
+                        <li className="text-[1.5rem] text-[#e6f0e6] hover:text-green-950">
+                            <Link to="/users">Users</Link>
                         </li>
                     </>
                 )}
@@ -78,7 +84,7 @@ export function Navbar() {
             <div className="flex items-center space-x-4">
                 {username ? (
                     <>
-                        <p className="text-2xl text-white">{username}</p>
+                        <p className="text-2xl text-white hover:text-green-950">{username}</p>
                         {image && (
                             <img
                                 src={image}
@@ -87,13 +93,13 @@ export function Navbar() {
                             />
                         )}
                         <FaCog
-                            className="text-2xl text-white cursor-pointer hover:text-green-400"
+                            className="text-2xl text-white cursor-pointer hover:text-green-950"
                             onClick={() => navigate("/account-settings")}
                         />
                         <button
                             onClick={handleLogout}
-                            className="text-[1.5rem] text-[#e6f0e6] bg-red-600 py-0.5 px-2
-                            rounded-lg border-white border-2 hover:bg-red-700"
+                            className="text-[1.5rem] text-[#e6f0e6] bg-red-600 py-0.1 px-1
+                            rounded-lg border-white border-2 hover:bg-red-700 hover:text-white"
                         >
                             Logout
                         </button>

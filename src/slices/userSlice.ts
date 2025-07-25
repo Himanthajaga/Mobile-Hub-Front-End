@@ -17,9 +17,22 @@ const initialState: UserState = {
 export const fetchUsers = createAsyncThunk(
     "users/getAllUsers",
         async () => {
-            const response = await backendApi.get("/users");
+            const response = await backendApi.get("/auth/all");
+            console.log("Response received at fetchUsers endpoint", response.data);
             return response.data;
         }
+);
+export const toggleUserActive = createAsyncThunk(
+    "users/toggleUserActive",
+    async (userId, { rejectWithValue }) => {
+        try {
+            const response = await backendApi.post(`/users/${userId}/toggle-active`, { userId });
+            console.log("Response received at toggleUserActive endpoint", response.data);
+            return response.data;
+        } catch (error) {
+            return rejectWithValue(error.response?.data || error.message);
+        }
+    }
 );
 export const addUser = createAsyncThunk(
     "users/addUser",
@@ -85,6 +98,14 @@ const userSlice = createSlice({
             .addCase(deleteUser.fulfilled, (state:UserState, action:any) => {
                 state.users = state.users.filter(user => user.userId !== action.payload.id);
             });
+        builder
+            .addCase(toggleUserActive.fulfilled, (state: UserState, action: any) => {
+            const updatedUser = action.payload; // Response from the API
+            const userIndex = state.users.findIndex(user => user.userId === updatedUser.userId);
+            if (userIndex !== -1) {
+                state.users[userIndex].status = updatedUser.status; // Update the status
+            }
+        });
     },
 });
 

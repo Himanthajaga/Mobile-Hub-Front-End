@@ -13,6 +13,7 @@ export function AccountSettings() {
         oldPassword: "",
         newPassword: "",
         role: "",
+        status: "active", // Default status
     });
     const navigate = useNavigate();
     const dispatch = useDispatch<AppDispatch>();
@@ -24,6 +25,8 @@ export function AccountSettings() {
         const storedImage = localStorage.getItem("image");
         const storedUserId = localStorage.getItem("userId");
         const storedRole = localStorage.getItem("role");
+        // Initialize formData with stored values or empty strings
+        const storedStatus = localStorage.getItem("status") || "active"; // Default to 'active' if not set
 
         setFormData({
             userId: storedUserId || "",
@@ -33,6 +36,7 @@ export function AccountSettings() {
             oldPassword: "",
             newPassword: "",
             role: storedRole || "",
+            status: storedStatus,
         });
     }, []);
 
@@ -108,6 +112,7 @@ export function AccountSettings() {
             localStorage.setItem("image", formData.image);
             localStorage.setItem("userId", response.payload?.userId || ""); // Use response.payload if available
             localStorage.setItem("role", response.payload?.role || "");
+            localStorage.setItem("status", formData.status || "active");
             alert("Account updated successfully!");
             navigate("/login");
         } catch (error) {

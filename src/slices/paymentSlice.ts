@@ -16,7 +16,9 @@ const initialState: PaymentState = {
 export const getAllPayments = createAsyncThunk(
     "payment/getAllPayments",
     async () => {
+        console.log("Request received at getAllPayments endpoint");
         const response = await backendApi.get("/payments/all");
+        console.log("Response from backend:", response.data);
         return response.data;
     }
 );

@@ -13,6 +13,8 @@ import {ManageProducts} from "../../pages/ManageProducts/ManageProducts.tsx";
 import {AddCategory} from "../../pages/AddCategory/AddCategory.tsx";
 import {Register} from "../../pages/Register/Register.tsx";
 import {AccountSettings} from "../../pages/AccountSettings/AccountSettings.tsx";
+import Users from "../../pages/UserManagement/Users.tsx";
+import Payments from "../../pages/Payments/Payments.tsx";
 
 export function MainContent() {
     const [role, setRole] = useState<string | null>(null);
@@ -75,6 +77,16 @@ export function MainContent() {
                     <Route path="/manage-products" element={
                         <ProtectedRoute allowedRoles={['admin']}>
                             <ManageProducts />
+                        </ProtectedRoute>
+                    } />
+                    <Route path="/users" element={
+                        <ProtectedRoute allowedRoles={['admin']}>
+                            <Users />
+                        </ProtectedRoute>
+                    } />
+                    <Route path="/payments" element={
+                        <ProtectedRoute allowedRoles={['admin']}>
+                            <Payments />
                         </ProtectedRoute>
                     } />
                 </>

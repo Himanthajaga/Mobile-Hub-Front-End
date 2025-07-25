@@ -6,4 +6,6 @@ export interface ProductData {
     image: string;
     description: string;
     category: string;
+
+    filter(param: (product) => boolean): string;
 }

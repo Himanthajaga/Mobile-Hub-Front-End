@@ -106,6 +106,7 @@ export const Register = () => {
                 email: formData.email,
                 password: formData.password,
                 image: formData.image,
+                status: "active", // Default status
             };
 
             // Dispatch appropriate action

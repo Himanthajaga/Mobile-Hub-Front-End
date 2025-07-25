@@ -22,18 +22,28 @@ export function Login() {
 
             const response = await backendApi.post('/auth/login', userCredentials);
             console.log("Login response:", response.data);
+            const user: UserData = getUserFromToken(response.data.accessToken);
+
+            // Check if the user's status is inactive
+            if (user.status === "inactive") {
+                alert("You can't log in. Admin has restricted your account.");
+                return; // Stop further execution
+            }
+
             const accessToken = response.data.accessToken;
             const refreshToken = response.data.refreshToken;
 
             localStorage.setItem('token', accessToken);
             localStorage.setItem('refreshToken', refreshToken);
 
-            const user:UserData = getUserFromToken(accessToken);
+
+
             localStorage.setItem('username', user.username as string);
             localStorage.setItem('role', user.role as string);
             localStorage.setItem('userId', user.userId as string);
             localStorage.setItem('image', response.data.user.image as string);
             localStorage.setItem('email', user.email as string);
+            localStorage.setItem('status', user.status || 'active'); // Default to 'active' if status is not set
 
             alert("Successfully logged in!");
             if (user.role === 'customer') {
@@ -43,7 +53,7 @@ export function Login() {
             }
         } catch (error) {
             console.error(error);
-            alert("Login failed");
+            alert("You can't log in. Admin has restricted your account.");
         }
     };
 
