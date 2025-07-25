@@ -15,6 +15,8 @@ import {Register} from "../../pages/Register/Register.tsx";
 import {AccountSettings} from "../../pages/AccountSettings/AccountSettings.tsx";
 import Users from "../../pages/UserManagement/Users.tsx";
 import Payments from "../../pages/Payments/Payments.tsx";
+import {ResetPassword} from "../../pages/ResetPassword/ResetPassword.tsx";
+import {ForgotPassword} from "../../pages/ForgotPassword/ForgotPassword.tsx";
 
 export function MainContent() {
     const [role, setRole] = useState<string | null>(null);
@@ -31,6 +33,8 @@ export function MainContent() {
                 {/* Register route is always accessible */}
                 <Route path="/register" element={<Register />} />
                 <Route path="/account-settings" element={<AccountSettings />} />
+                {/*<Route path="/Reset-Password" element={<ResetPassword />} />*/}
+                {/*<Route path="/Forgot-Password" element={<ForgotPassword />} />*/}
                 {/* Routes visible to non-admins only */}
                 {role === 'customer' && (
                     <>

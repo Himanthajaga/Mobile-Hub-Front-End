@@ -68,6 +68,52 @@ export const deleteUser = createAsyncThunk(
         return response.data;
     }
 );
+export const forgotPassword = createAsyncThunk(
+    "user/forgotPassword",
+    async (email: string, { rejectWithValue }) => {
+        try {
+            const response = await backendApi.post("/auth/request-password-reset", { email });
+            return response.data;
+        } catch (error: any) {
+            return rejectWithValue(error.response?.data || "Error sending password reset email");
+        }
+    }
+);
+
+export const resetPassword = createAsyncThunk(
+    "user/resetPassword",
+    async ({ token, newPassword }: { token: string; newPassword: string }, { rejectWithValue }) => {
+        try {
+            const response = await backendApi.post("/auth/reset-password", { token, newPassword });
+            return response.data;
+        } catch (error: any) {
+            return rejectWithValue(error.response?.data || "Error resetting password");
+        }
+    }
+);
+export const sendOtp = createAsyncThunk(
+    "user/sendOtp",
+    async (email: string, { rejectWithValue }) => {
+        try {
+            const response = await backendApi.post("/auth/send-otp", { email });
+            return response.data;
+        } catch (error: any) {
+            return rejectWithValue(error.response?.data || "Error sending OTP");
+        }
+    }
+);
+
+export const resetPasswordWithOtp = createAsyncThunk(
+    "user/resetPasswordWithOtp",
+    async ({ email, otp, newPassword }: { email: string; otp: string; newPassword: string }, { rejectWithValue }) => {
+        try {
+            const response = await backendApi.post("/auth/reset-password-with-otp", { email, otp, newPassword });
+            return response.data;
+        } catch (error: any) {
+            return rejectWithValue(error.response?.data || "Error resetting password");
+        }
+    }
+);
 
 const userSlice = createSlice({
     name: "users",
@@ -106,6 +152,21 @@ const userSlice = createSlice({
                 state.users[userIndex].status = updatedUser.status; // Update the status
             }
         });
+        builder
+            .addCase(forgotPassword.fulfilled, (state: UserState, action: any) => {
+                console.log("Password reset email sent:", action.payload);
+            })
+            .addCase(forgotPassword.rejected, (state: UserState, action: any) => {
+                state.error = action.payload || "Failed to send password reset email.";
+            });
+        builder
+            .addCase(resetPassword.fulfilled, (state: UserState, action: any) => {
+                console.log("Password reset successful:", action.payload);
+            })
+            .addCase(resetPassword.rejected, (state: UserState, action: any) => {
+                state.error = action.payload || "Failed to reset password.";
+            });
+
     },
 });
 

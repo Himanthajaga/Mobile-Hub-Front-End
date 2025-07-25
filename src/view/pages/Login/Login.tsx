@@ -114,6 +114,14 @@ export function Login() {
                             </button>
                         </p>
                     </div>
+                    <div className="mt-4 text-center">
+                        <button
+                            onClick={() => navigate("/sendOtp")}
+                            className="text-blue-600 hover:underline text-sm"
+                        >
+                            Forgot Password?
+                        </button>
+                    </div>
                 </form>
             </div>
         </div>
