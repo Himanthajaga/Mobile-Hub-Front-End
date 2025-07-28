@@ -18,24 +18,24 @@ export function Payments() {
         <div className="p-4">
             <h1 className="text-2xl font-bold mb-4">Payments</h1>
             {payments && payments.length > 0 ? (
-                <table className="table-auto w-full border-collapse border border-gray-300">
+                <table className="table-auto w-full border-collapse border border-gray-800">
                     <thead>
                     <tr>
-                        <th className="border border-gray-300 px-4 py-2">Payment ID</th>
-                        <th className="border border-gray-300 px-4 py-2">Amount</th>
-                        <th className="border border-gray-300 px-4 py-2">Currency</th>
-                        <th className="border border-gray-300 px-4 py-2">Status</th>
-                        <th className="border border-gray-300 px-4 py-2">User Email</th>
+                        <th className="border border-gray-800 px-4 py-2 bg-green-300">Payment ID</th>
+                        <th className="border border-gray-800 px-4 py-2 bg-green-300">Amount</th>
+                        <th className="border border-gray-800 px-4 py-2 bg-green-300">Currency</th>
+                        <th className="border border-gray-800 px-4 py-2 bg-green-300">Status</th>
+                        <th className="border border-gray-800 px-4 py-2 bg-green-300">User Email</th>
                     </tr>
                     </thead>
                     <tbody>
                     {payments.map((payment) => (
                         <tr key={payment._id}>
-                            <td className="border border-gray-300 px-4 py-2">{payment.paymentId}</td>
-                            <td className="border border-gray-300 px-4 py-2">{payment.amount}</td>
-                            <td className="border border-gray-300 px-4 py-2">{payment.currency}</td>
-                            <td className="border border-gray-300 px-4 py-2">{payment.status}</td>
-                            <td className="border border-gray-300 px-4 py-2">{payment.userId?.email || "N/A"}</td>
+                            <td className="border border-gray-800 px-4 py-2 bg hover:bg-green-400">{payment.paymentId}</td>
+                            <td className="border border-gray-800 px-4 py-2 bg hover:bg-green-400">{payment.amount}</td>
+                            <td className="border border-gray-800 px-4 py-2 bg hover:bg-green-400">{payment.currency}</td>
+                            <td className="border border-gray-800 px-4 py-2 bg hover:bg-green-400">{payment.status}</td>
+                            <td className="border border-gray-800 px-4 py-2 bg hover:bg-green-400">{payment.userId?.email || "N/A"}</td>
                         </tr>
                     ))}
                     </tbody>

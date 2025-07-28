@@ -7,8 +7,6 @@ import {isTokenExpired} from "./auth/auth.ts";
 import {Unauthorized} from "./auth/Unauthorized.tsx";
 import {Register} from "./view/pages/Register/Register.tsx"; // Import JWT token validation
 import { AccountSettings } from "./view/pages/AccountSettings/AccountSettings";
-import {ResetPassword} from "./view/pages/ResetPassword/ResetPassword.tsx";
-import {ForgotPassword} from "./view/pages/ForgotPassword/ForgotPassword.tsx";
 import {SendOtp} from "./view/pages/SendOtp/SendOtp.tsx";
 import {ResetPasswordWithOtp} from "./view/pages/ResetPasswordWithOtp/ResetPasswordWithOtp.tsx";
 function App() {
@@ -26,8 +24,6 @@ function App() {
         <Routes>
             <Route path="/sendOtp" element={<SendOtp />} />
             <Route path="/Reset-password-with-otp" element={<ResetPasswordWithOtp />} />
-            <Route path="/Reset-Password" element={<ResetPassword />} />
-            <Route path="/Forgot-Password" element={<ForgotPassword />} />
             <Route path="/account-settings" element={<AccountSettings />} />
             <Route path="/register" element={<Register/>}></Route>
             <Route path="/*" element={<DefaultLayout/>}></Route>

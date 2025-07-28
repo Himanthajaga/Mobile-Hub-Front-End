@@ -38,23 +38,23 @@ export function Users() {
         <div className="p-4">
             <h1 className="text-2xl font-bold mb-4">Users</h1>
             {users && users.length > 0 ? (
-                <table className="table-auto w-full border-collapse border border-gray-300">
+                <table className="table-auto w-full border-collapse border border-gray-800">
                     <thead>
                     <tr>
-                        <th className="border border-gray-300 px-4 py-2">Name</th>
-                        <th className="border border-gray-300 px-4 py-2">Role</th>
-                        <th className="border border-gray-300 px-4 py-2">Email</th>
-                        <th className="border border-gray-300 px-4 py-2">Status</th>
-                        <th className="border border-gray-300 px-4 py-2">Actions</th>
+                        <th className="border border-gray-800 px-4 py-2 bg-green-300">Name</th>
+                        <th className="border border-gray-800 px-4 py-2 bg-green-300">Role</th>
+                        <th className="border border-gray-800 px-4 py-2 bg-green-300">Email</th>
+                        <th className="border border-gray-800 px-4 py-2 bg-green-300">Status</th>
+                        <th className="border border-gray-800 px-4 py-2 bg-green-300">Actions</th>
                     </tr>
                     </thead>
                     <tbody>
                     {users.map((user) => (
                         <tr key={user.userId}>
-                            <td className="border border-gray-300 px-4 py-2">{user.username}</td>
-                            <td className="border border-gray-300 px-4 py-2">{user.role}</td>
-                            <td className="border border-gray-300 px-4 py-2">{user.email}</td>
-                            <td className="border border-gray-300 px-4 py-2">
+                            <td className="border border-gray-800 px-4 py-2 bg hover:bg-green-400">{user.username}</td>
+                            <td className="border border-gray-800 px-4 py-2 bg hover:bg-green-400">{user.role}</td>
+                            <td className="border border-gray-800 px-4 py-2 bg hover:bg-green-400">{user.email}</td>
+                            <td className="border border-gray-800 px-4 py-2 bg hover:bg-green-400">
                                 {user.status === "active" ? "Active" : "Inactive"}
                             </td>
                             <td className="border border-gray-300 px-4 py-2">

@@ -114,25 +114,25 @@ export function AdminPanel() {
                 {filteredProducts.map((product) => (
                     <div
                         key={product.id}
-                        className="w-50 h-80 mr-2 mb-2 justify-center items-center border-gray-500 border-[1px] p-4 rounded shadow-md bg-white"
+                        className="w-65 h-130 mr-2 mb-2 justify-center items-center border-gray-500 border-[1px] p-4 rounded shadow-md bg-white"
                     >
                         <h3 className="text-lg font-bold">{product.name}</h3>
-                        <p className="text-sm text-gray-600">
+                        <p className="text-m text-blue-800">
                             {getCategoryName(product.category)}
                         </p>
                         {product.image ? (
                             <img
                                 src={product.image}
                                 alt={product.name}
-                                className="w-full h-40 object-cover mt-2"
+                                className="w-full h-70 object-cover mt-1"
                             />
                         ) : (
                             <div className="w-full h-40 bg-gray-200 flex items-center justify-center">
                                 <span className="text-gray-500">No Image</span>
                             </div>
                         )}
-                        <p className="text-sm text-gray-600 mt-2">{product.description}</p>
-                        <p className="text-sm text-gray-600 mt-2">${product.price}</p>
+                        <p className="text-m text-gray-600 mt-2">{product.description}</p>
+                        <p className="text-lg text-red-600 mt-2">{product.price} {product.currency}</p>
                     </div>
                 ))}
             </div>

@@ -135,23 +135,23 @@ export function ManageProducts() {
             </div>
 
             {/* Display Filtered Products */}
-            <div className="flex flex-wrap ml-[1px] mt-6 mb-5 justify-center items-center mx-auto">
+            <div className="flex flex-wrap ml-[1px] mt-6 mb-5 justify-center items-center mx-auto ">
                 {filteredProducts.map((product) => (
                     <div
                         key={product.id}
-                        className="w-50 h-auto mr-2 mb-2 justify-center items-center border-gray-500 border-[1px] p-4 rounded shadow-md bg-white"
+                        className="w-50 h-auto mr-2 mb-2 justify-center items-center border-gray-500 border-[1px] p-4 rounded shadow-md bg-white hover:shadow-2xl transition-shadow duration-300"
                     >
                         {product.image && (
                             <img
                                 src={product.image}
                                 alt={product.name}
-                                className="w-full h-40 object-cover mb-2"
+                                className="w-full h-50 object-cover mb-2"
                             />
                         )}
                         <h3 className="text-lg font-bold">{product.name}</h3>
-                        <p className="text-sm text-gray-600">Price: {product.price} {product.currency}</p>
-                        <p className="text-sm text-gray-600">Category: {getCategoryName(product.category)}</p>
-                        <p className="text-sm text-gray-500">{product.description}</p>
+                        <p className="text-m text-red-600">Price: {product.price} {product.currency}</p>
+                        <p className="text-m text-black">Category: {getCategoryName(product.category)}</p>
+                        <p className="text-sm text-gray-800">{product.description}</p>
                         <div className="mt-2 flex justify-between">
                             <button
                                 onClick={() => handleUpdate(product)}

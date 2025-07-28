@@ -58,9 +58,9 @@ export function Login() {
     };
 
     return (
-        <div className="flex items-center justify-center min-h-screen bg-green-50 px-4">
-            <div className="w-full max-w-sm bg-white border border-green-300 rounded-lg shadow-md p-6">
-                <h2 className="text-2xl font-semibold text-green-800 underline decoration-2 mb-6 text-center">
+        <div className="flex items-center justify-center min-h-screen bg-gradient-to-r from-green-400 via-blue-500 to-purple-600">
+            <div className="w-full max-w-md bg-white rounded-lg shadow-lg p-8">
+                <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">
                     Sign In
                 </h2>
                 <div className="mt-1 mb-4">
@@ -69,46 +69,46 @@ export function Login() {
                         Go Back
                     </button>
                 </div>
-                <form className="space-y-4" onSubmit={handleSubmit(authenticateUser)}>
+                <form className="space-y-6" onSubmit={handleSubmit(authenticateUser)}>
                     <div>
-                        <label htmlFor="email" className="block text-sm font-medium text-green-700">
+                        <label htmlFor="email" className="block text-sm font-medium text-gray-700">
                             Email
                         </label>
                         <input
                             type="text"
                             id="username"
                             {...register("username")}
-                            className="mt-1 block w-full border border-green-200 rounded-md text-sm shadow-sm focus:ring-green-500 focus:border-green-500"
+                            className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
                             placeholder="username"
                         />
                     </div>
 
                     <div>
-                        <label htmlFor="password" className="block text-sm font-medium text-green-700">
+                        <label htmlFor="password" className="block text-sm font-medium text-gray-700">
                             Password
                         </label>
                         <input
                             type="password"
                             id="password"
                             {...register("password")}
-                            className="mt-1 block w-full border border-green-200 rounded-md text-sm shadow-sm focus:ring-green-500 focus:border-green-500"
+                            className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
                             placeholder="••••••••"
                         />
                     </div>
 
                     <button
                         type="submit"
-                        className="w-full py-2 px-4 bg-green-600 text-white text-sm font-medium rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500"
+                        className="w-full py-2 px-4 bg-blue-600 text-white font-medium text-lg rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     >
                         Sign In
                     </button>
-                    <div className="text-sm text-center text-green-600">
+                    <div className="text-m text-center text-green-600">
                         <p>
                             Don't have an account?{" "}
                             <button
                                 type="button"
                                 onClick={() => navigate("/register")}
-                                className="font-medium hover:underline"
+                                className="w-full py-2 px-4 bg-gray-300 text-gray-800 font-medium text-lg rounded-lg shadow-md hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-500"
                             >
                                 Sign Up
                             </button>
@@ -117,7 +117,7 @@ export function Login() {
                     <div className="mt-4 text-center">
                         <button
                             onClick={() => navigate("/sendOtp")}
-                            className="text-blue-600 hover:underline text-sm"
+                            className="w-full py-2 px-4 bg-gray-300 text-gray-800 font-medium text-lg rounded-lg shadow-md hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-500"
                         >
                             Forgot Password?
                         </button>

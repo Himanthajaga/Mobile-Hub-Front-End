@@ -122,12 +122,12 @@ export function AccountSettings() {
     };
 
     return (
-        <div className="flex items-center justify-center min-h-screen bg-gray-50 px-4">
-            <div className="w-full max-w-md bg-white border border-gray-300 rounded-lg shadow-md p-6">
-                <h2 className="text-2xl font-semibold text-gray-800 underline decoration-2 mb-6 text-center">
+        <div className="flex items-center justify-center min-h-screen bg-gradient-to-r from-green-400 via-blue-500 to-purple-600">
+            <div className="w-full max-w-xl bg-white rounded-lg shadow-lg p-8">
+                <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">
                     Account Settings
                 </h2>
-                <form className="space-y-4" onSubmit={handleSubmit}>
+                <form className="space-y-6" onSubmit={handleSubmit}>
                     <div>
                         <label htmlFor="username" className="block text-sm font-medium text-gray-700">
                             Username
@@ -138,7 +138,8 @@ export function AccountSettings() {
                             name="username"
                             value={formData.username}
                             onChange={handleInputChange}
-                            className="mt-1 block w-full border border-gray-200 rounded-md text-sm shadow-sm focus:ring-green-500 focus:border-green-500"
+                            className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                            placeholder="Enter your username"
                         />
                     </div>
                     <div>
@@ -151,7 +152,8 @@ export function AccountSettings() {
                             name="email"
                             value={formData.email}
                             onChange={handleInputChange}
-                            className="mt-1 block w-full border border-gray-200 rounded-md text-sm shadow-sm focus:ring-green-500 focus:border-green-500"
+                            className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                            placeholder="Enter your email"
                         />
                     </div>
                     <div>
@@ -163,7 +165,7 @@ export function AccountSettings() {
                             id="image"
                             name="image"
                             onChange={handleFileChange}
-                            className="mt-1 block w-full border border-gray-200 rounded-md text-sm shadow-sm focus:ring-green-500 focus:border-green-500"
+                            className="border p-2 w-full"
                         />
                         {formData.image && (
                             <img
@@ -183,7 +185,8 @@ export function AccountSettings() {
                             name="oldPassword"
                             value={formData.oldPassword}
                             onChange={handleInputChange}
-                            className="mt-1 block w-full border border-gray-200 rounded-md text-sm shadow-sm focus:ring-green-500 focus:border-green-500"
+                            className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                            placeholder="Enter your old password"
                             required
                         />
                     </div>
@@ -197,12 +200,13 @@ export function AccountSettings() {
                             name="newPassword"
                             value={formData.newPassword}
                             onChange={handleInputChange}
-                            className="mt-1 block w-full border border-gray-200 rounded-md text-sm shadow-sm focus:ring-green-500 focus:border-green-500"
+                            className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                            placeholder="Enter your new password"
                         />
                     </div>
                     <button
                         type="submit"
-                        className="w-full py-2 px-4 bg-green-600 text-white text-sm font-medium rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500"
+                        className="w-full py-2 px-4 bg-blue-600 text-white font-medium text-lg rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     >
                         Update Account
                     </button>

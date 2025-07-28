@@ -4,8 +4,10 @@ import { loadStripe } from "@stripe/stripe-js";
 import { Elements, CardNumberElement, CardExpiryElement, CardCvcElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import type { RootState, AppDispatch } from "../../../store/store";
 import { addPayment } from "../../../slices/paymentSlice";
-import {getUserFromToken, isTokenExpired} from "../../../auth/auth.ts";
-import {useNavigate} from "react-router-dom";
+import { removeFromCart, updateItemQuantity } from "../../../slices/cartSlice";
+import { getUserFromToken, isTokenExpired } from "../../../auth/auth.ts";
+import { useNavigate } from "react-router-dom";
+
 const stripePromise = loadStripe("pk_test_51R6ZgFKiBxldEfFS2fX0YC3riyZE1M5C8oFqG239MAcBiLl6TqyoKtzPsqiiXEV5ilYkqRYHvn8hnvqY5EdNfR8L00weOUntYV");
 
 const CheckoutForm = ({ totalAmount }: { totalAmount: number }) => {
@@ -30,26 +32,21 @@ const CheckoutForm = ({ totalAmount }: { totalAmount: number }) => {
 
         try {
             const authToken = localStorage.getItem("token");
-            console.log("Retrieved authToken:", authToken);
 
             if (!authToken || isTokenExpired(authToken)) {
                 alert("You must be logged in to make a payment.");
-                console.error("User is not authenticated or token is expired.");
                 return;
             }
 
-            // Decode the token to get the userId
             const userData = getUserFromToken(authToken);
             const userId = userData.userId;
             const email = userData.email;
 
             if (!userId) {
-                console.error("User ID not found in token.");
                 alert("Unable to retrieve user information.");
                 return;
             }
 
-            // Create a PaymentIntent on the backend
             const paymentData = {
                 amount: totalAmount,
                 currency: "LKR",
@@ -57,14 +54,11 @@ const CheckoutForm = ({ totalAmount }: { totalAmount: number }) => {
                 status: "PENDING",
                 userId,
                 createdAt: new Date(),
-                email: email, // Include user email for confirmation
+                email,
             };
-            console.log("Payment data to be sent:", paymentData);
+
             const result = await dispatch(addPayment(paymentData)).unwrap();
 
-            console.log("PaymentIntent created successfully:", result);
-
-            // Confirm the payment with Stripe
             const { paymentIntent, error } = await stripe.confirmCardPayment(result.clientSecret, {
                 payment_method: {
                     card: cardNumberElement,
@@ -72,16 +66,11 @@ const CheckoutForm = ({ totalAmount }: { totalAmount: number }) => {
             });
 
             if (error) {
-                console.error("Payment error:", error);
                 alert("Payment failed!");
             } else if (paymentIntent?.status === "succeeded") {
-                console.log("Payment successful:", paymentIntent);
+                const transactionId = paymentIntent.id;
+                const paymentId = paymentIntent.charges?.data[0]?.id;
 
-                // Extract transactionId and paymentId from paymentIntent
-                const transactionId = paymentIntent.id; // Stripe's PaymentIntent ID
-                const paymentId = paymentIntent.charges?.data[0]?.id; // Charge ID from the first charge
-
-                // Update the payment data with actual transactionId and paymentId
                 const updatedPaymentData = {
                     ...paymentData,
                     status: "COMPLETED",
@@ -89,35 +78,27 @@ const CheckoutForm = ({ totalAmount }: { totalAmount: number }) => {
                     paymentId,
                 };
 
-                console.log("Updated payment data to be saved:", updatedPaymentData);
-
-                // Dispatch the updated payment data to save it
                 await dispatch(addPayment(updatedPaymentData));
 
                 alert("Payment successful!");
-
-                // Clear the cart
                 dispatch({ type: "cart/clearCart" });
-
-                // Redirect to the home page
                 navigate("/");
-
-                // Optionally, reload the home page
                 window.location.reload();
             }
         } catch (error) {
             console.error("Error during payment process:", error);
         }
     };
+
     return (
-        <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
+        <form onSubmit={handleSubmit} className="space-y-4 max-w-screen-xl mx-auto p-6 bg-white shadow-md rounded-lg">
+            <div className="w-100">
                 <label className="block text-sm font-medium mb-1">Card Number</label>
                 <CardNumberElement
                     options={{
                         style: {
                             base: {
-                                fontSize: "16px",
+                                fontSize: "18px",
                                 color: "#424770",
                                 letterSpacing: "0.025em",
                                 fontFamily: "Arial, sans-serif",
@@ -130,7 +111,7 @@ const CheckoutForm = ({ totalAmount }: { totalAmount: number }) => {
                             },
                         },
                     }}
-                    className="border border-gray-300 rounded p-2 w-full"
+                    className="border border-gray-300 rounded p-3 w-full"
                 />
             </div>
             <div>
@@ -139,7 +120,7 @@ const CheckoutForm = ({ totalAmount }: { totalAmount: number }) => {
                     options={{
                         style: {
                             base: {
-                                fontSize: "16px",
+                                fontSize: "18px",
                                 color: "#424770",
                                 letterSpacing: "0.025em",
                                 fontFamily: "Arial, sans-serif",
@@ -152,7 +133,7 @@ const CheckoutForm = ({ totalAmount }: { totalAmount: number }) => {
                             },
                         },
                     }}
-                    className="border border-gray-300 rounded p-2 w-full"
+                    className="border border-gray-300 rounded p-3 w-full"
                 />
             </div>
             <div>
@@ -161,7 +142,7 @@ const CheckoutForm = ({ totalAmount }: { totalAmount: number }) => {
                     options={{
                         style: {
                             base: {
-                                fontSize: "16px",
+                                fontSize: "18px",
                                 color: "#424770",
                                 letterSpacing: "0.025em",
                                 fontFamily: "Arial, sans-serif",
@@ -174,13 +155,13 @@ const CheckoutForm = ({ totalAmount }: { totalAmount: number }) => {
                             },
                         },
                     }}
-                    className="border border-gray-300 rounded p-2 w-full"
+                    className="border border-gray-300 rounded p-3 w-full"
                 />
             </div>
             <button
                 type="submit"
                 disabled={!stripe || !elements}
-                className="bg-gradient-to-r from-blue-500 to-green-400 text-white px-6 py-3 rounded w-full"
+                className="bg-gradient-to-r from-blue-500 to-green-400 text-white px-8 py-4 rounded w-full text-lg"
             >
                 Pay Now
             </button>
@@ -190,35 +171,68 @@ const CheckoutForm = ({ totalAmount }: { totalAmount: number }) => {
 
 export function ShoppingCart() {
     const { items } = useSelector((state: RootState) => state.cart);
+    const dispatch = useDispatch<AppDispatch>();
 
     const totalAmount = items.reduce(
         (total, item) => total + item.product.price * item.itemCount,
         0
     );
 
+    const handleRemoveItem = (productId: string) => {
+        dispatch(removeFromCart(productId));
+    };
+
+    const handleUpdateQuantity = (productId: string, newQuantity: number) => {
+        if (newQuantity > 0) {
+            dispatch(updateItemQuantity({ productId, quantity: newQuantity }));
+        }
+    };
+
     return (
         <div className="p-4">
-            <h1 className="text-2xl font-bold mb-4">Shopping Cart</h1>
-            <table className="min-w-full border-collapse mb-4">
+            <h1 className="text-4xl font-bold mb-4 font-sans bg-gradient-to-r from-blue-500 to-green-400">Shopping Cart</h1>
+            <table className="min-w-full border-collapse mb-4 bg-white shadow-md rounded-lg overflow-hidden border border-gray-200">
                 <thead>
                 <tr className="border-b bg-green-700 text-white">
-                    <th className="px-6 py-4 text-left text-sm font-medium">Name</th>
-                    <th className="px-6 py-4 text-left text-sm font-medium">Unit Price</th>
-                    <th className="px-6 py-4 text-left text-sm font-medium">Quantity</th>
-                    <th className="px-6 py-4 text-left text-sm font-medium">Total Price</th>
+                    <th className="px-6 py-4 text-left text-lg font-bold">Name</th>
+                    <th className="px-6 py-4 text-left text-lg font-bold">Unit Price</th>
+                    <th className="px-6 py-4 text-left text-lg font-bold">Quantity</th>
+                    <th className="px-6 py-4 text-left text-lg font-bold">Total Price</th>
+                    <th className="px-6 py-4 text-left text-lg font-bold">Actions</th>
                 </tr>
                 </thead>
                 <tbody>
                 {items.map((item) => (
-                    <tr key={item.product.id} className="border-b">
-                        <td className="px-6 py-4 text-sm">{item.product.name}</td>
-                        <td className="px-6 py-4 text-sm">
+                    <tr key={item.product.id} className="border-b hover:bg-green-100">
+                        <td className="px-6 py-4 text-m">{item.product.name}</td>
+                        <td className="px-6 py-4 text-m">
                             {item.product.price} {item.product.currency}
                         </td>
-                        <td className="px-6 py-4 text-sm">{item.itemCount}</td>
-                        <td className="px-6 py-4 text-sm">
-                            {(item.product.price * item.itemCount).toFixed(2)}{" "}
-                            {item.product.currency}
+                        <td className="px-6 py-4 text-m flex items-center">
+                            <button
+                                className="px-2 py-1 bg-gray-300 rounded hover:bg-gray-400"
+                                onClick={() => handleUpdateQuantity(item.product.id, item.itemCount - 1)}
+                            >
+                                -
+                            </button>
+                            <span className="mx-2">{item.itemCount}</span>
+                            <button
+                                className="px-2 py-1 bg-gray-300 rounded hover:bg-gray-400"
+                                onClick={() => handleUpdateQuantity(item.product.id, item.itemCount + 1)}
+                            >
+                                +
+                            </button>
+                        </td>
+                        <td className="px-6 py-4 text-m">
+                            {(item.product.price * item.itemCount).toFixed(2)} {item.product.currency}
+                        </td>
+                        <td className="px-6 py-4 text-m">
+                            <button
+                                className="text-red-500 hover:text-red-700"
+                                onClick={() => handleRemoveItem(item.product.id)}
+                            >
+                                🗑️
+                            </button>
                         </td>
                     </tr>
                 ))}

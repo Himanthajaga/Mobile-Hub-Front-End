@@ -43,9 +43,23 @@ const cartSlice = createSlice({
                     item.itemCount -= 1;
                 }
             }
-        }
-    }});
+        },
+        removeFromCart: (state: CartState, action: PayloadAction<number>): void => {
+            state.items = state.items.filter((item) => item.product.id !== action.payload);
+        },
+        updateItemQuantity: (state: CartState, action: PayloadAction<{ productId: number; quantity: number }>): void => {
+            const item = state.items.find((existingItem) => existingItem.product.id === action.payload.productId);
+            if (item) {
+                item.itemCount = action.payload.quantity;
+            }
+        },
+    },
+});
 export const {addItemToCart,
     increaseQuantity,
-    decreaseQuantity} = cartSlice.actions;
+    decreaseQuantity,
+removeFromCart,
+updateItemQuantity
+} = cartSlice.actions;
+
 export default cartSlice.reducer
