@@ -54,7 +54,7 @@ export function AdminPanel() {
     return (
         <div>
             {/* Filter Options */}
-            <div className="mb-4 p-4 bg-gray-100 rounded flex gap-4">
+            <div className="mb-4 p-4 bg-gradient-to-r from-green-400 via-blue-500 to-purple-600 rounded flex gap-20">
                 {/* Category Selection Dropdown */}
                 <div>
                     <h2 className="text-xl font-bold mb-2">Filter by Category</h2>
@@ -114,7 +114,7 @@ export function AdminPanel() {
                 {filteredProducts.map((product) => (
                     <div
                         key={product.id}
-                        className="w-65 h-130 mr-2 mb-2 justify-center items-center border-gray-500 border-[1px] p-4 rounded shadow-md bg-white"
+                        className="w-65 h-120 mr-2 mb-2 justify-center items-center border-gray-500 border-[1px] p-4 rounded shadow-md bg-white"
                     >
                         <h3 className="text-lg font-bold">{product.name}</h3>
                         <p className="text-m text-blue-800">
@@ -124,7 +124,7 @@ export function AdminPanel() {
                             <img
                                 src={product.image}
                                 alt={product.name}
-                                className="w-full h-70 object-cover mt-1"
+                                className="w-50 h-50 bject-cover mt-0.5"
                             />
                         ) : (
                             <div className="w-full h-40 bg-gray-200 flex items-center justify-center">

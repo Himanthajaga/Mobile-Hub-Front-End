@@ -34,7 +34,7 @@ export function Home() {
     return (
         <div>
             {/* Filter Options */}
-            <div className="mb-4 p-4 bg-gray-100 rounded flex gap-4">
+            <div className="mb-4 p-4 bg-gradient-to-r from-green-400 via-blue-500 to-purple-600 rounded flex gap-20rounded flex gap-4">
                 {/* Category Selection Dropdown */}
                 <div>
                     <h2 className="text-xl font-bold mb-2">Filter by Category</h2>

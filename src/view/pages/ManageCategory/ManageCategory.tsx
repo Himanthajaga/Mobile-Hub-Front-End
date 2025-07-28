@@ -40,11 +40,11 @@ export const ManageCategory = () => {
                     Add Category
                 </button>
             </div>
-            <div className="flex flex-wrap ml-[1px] mt-6 mb-5 justify-center items-center mx-auto">
+            <div className="flex flex-wrap ml-[1px] mt-6 mb-5 justify-center items-center mx-auto bg-green-200">
                 {list.map((category) => (
                     <div
                         key={category.id}
-                        className="w-50 h-80 mr-2 mb-2 justify-center items-center border-gray-500 border-[1px] p-4 rounded shadow-md bg-white"
+                        className="w-50 h-80 mr-2 mb-2 justify-center items-center border-gray-500 border-[1px] p-4 rounded shadow-md bg-gradient-to-r from-green-400 via-blue-500 to-purple-600"
                     >
                         <h3 className="text-lg font-bold">{category.name}</h3>
                         <p className="text-sm text-gray-600">{category.description}</p>

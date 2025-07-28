@@ -1,5 +1,5 @@
 // import './Navbar.css';
-import icon from '../../../assets/keels.jpg';
+import icon from '../../../assets/logo_1.png';
 import {Link, useNavigate} from "react-router-dom";
 import {useEffect, useState} from "react";
 import { FaUserCircle, FaCog, FaSignOutAlt, FaShoppingCart } from "react-icons/fa";
@@ -30,7 +30,7 @@ export function Navbar() {
         navigate("/login");
     };
     return (
-        <div className="p-2 bg-gradient-to-r from-green-500 to-blue-500 shadow-lg flex justify-between items-center">
+        <div className="p-2 bg-gradient-to-r from-green-400 via-blue-500 to-purple-500 shadow-lg flex justify-between items-center">
             <div className="flex items-center p-0.5">
                 <h1 className="text-3xl text-[#e6f0e6] hover:text-green-950 font-bold">
                     Mobile Hub

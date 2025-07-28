@@ -82,7 +82,7 @@ export function ManageProducts() {
             </div>
 
             {/* Filter Options */}
-            <div className="mb-4 p-4 bg-gray-100 rounded flex gap-4">
+            <div className="mb-4 p-4 bg-gradient-to-r from-green-400 via-blue-500 to-purple-300 rounded flex gap-20">
                 {/* Category Selection Dropdown */}
                 <div>
                     <h2 className="text-xl font-bold mb-2">Filter by Category</h2>
@@ -145,7 +145,7 @@ export function ManageProducts() {
                             <img
                                 src={product.image}
                                 alt={product.name}
-                                className="w-full h-50 object-cover mb-2"
+                                className="w-full h-55 object-cover mb-2"
                             />
                         )}
                         <h3 className="text-lg font-bold">{product.name}</h3>

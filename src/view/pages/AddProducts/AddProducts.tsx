@@ -134,7 +134,6 @@ export function AddProduct() {
                 // console.log("FormData before submission:", Object.fromEntries(formPayload.entries()));
                 await dispatch(addProduct(formPayload));
             }
-
             navigate("/manage-product", { state: { reload: true } }); // Pass reload state
         } catch (error) {
             console.error("Error submitting form:", error);

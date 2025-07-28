@@ -14,7 +14,7 @@ export function Contact() {
     };
 
     return (
-        <div className="max-w-md mx-auto mt-10 p-6 bg-green-500 rounded-lg text-white">
+        <div className="max-w-screen-lg mx-35 mt-10 p-18 bg-gradient-to-r from-green-400 via-blue-500 to-purple-600 rounded">
             <h2 className="text-2xl font-bold mb-4">Contact Us</h2>
             <form className="flex flex-col gap-4" onSubmit={handleSubmit(onSubmit)}>
                 <div className="flex flex-col gap-2">

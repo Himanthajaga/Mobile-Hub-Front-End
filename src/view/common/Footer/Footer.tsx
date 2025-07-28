@@ -12,7 +12,7 @@ export function Footer() {
     }
 
     return (
-        <footer className="bg-white border-t border-gray-200 bg-gradient-to-r from-green-500 to-blue-500 shadow-lg-gray-900">
+        <footer className="bg-white border-t border-gray-200 bg-gradient-to-r from-green-400 via-blue-500 to-purple-600 shadow-lg-gray-900">
             <div className="max-w-screen-xl mx-auto p-4">
                 <div className="flex flex-wrap items-center justify-between">
                     <Link to="/" className="flex items-center space-x-3 rtl:space-x-reverse">

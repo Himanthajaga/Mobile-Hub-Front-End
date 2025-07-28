@@ -20,7 +20,7 @@ export function Product({ data }: ProductProps) {
         dispatch(addItemToCart(data));
     };
     return (
-        <div className="w-65 h-auto mr-2 mb-2 justify-center items-center border-gray-500 border-[1px] p-4 rounded shadow-md bg-white">
+        <div className="w-65 h-auto mr-2 mb-2 justify-center items-center border-gray-500 border-[1px] p-4 rounded shadow-md bg-white ">
             {/* Name */}
             <h3 className="text-[#1f9e4b] text-[1.2rem] pl-1 font-bold mb-2">{data.name}</h3>
 
