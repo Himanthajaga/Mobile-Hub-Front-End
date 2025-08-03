@@ -3,7 +3,8 @@ import { useForm } from "react-hook-form";
 import { backendApi } from "../../../api.ts";
 import {getUserFromToken} from "../../../auth/auth.ts";
 import type {UserData} from "../../../model/UserData.ts";
-
+import {fetchCart} from "../../../slices/cartSlice.ts";
+import { useDispatch } from "react-redux";
 type FormData = {
     username: string;
     password: string;
@@ -12,6 +13,7 @@ type FormData = {
 export function Login() {
     const navigate = useNavigate();
     const { register, handleSubmit } = useForm<FormData>();
+    const dispatch = useDispatch();
 
     const authenticateUser = async (data: FormData) => {
         try {
@@ -44,6 +46,10 @@ export function Login() {
             localStorage.setItem('image', response.data.user.image as string);
             localStorage.setItem('email', user.email as string);
             localStorage.setItem('status', user.status || 'active'); // Default to 'active' if status is not set
+
+
+            // Dispatch fetchCart to load cart details
+            dispatch(fetchCart(user.userId));
 
             alert("Successfully logged in!");
             if (user.role === 'customer') {

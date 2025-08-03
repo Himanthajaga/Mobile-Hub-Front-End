@@ -1,14 +1,24 @@
-import React from "react";
+import React, {useEffect} from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements, CardNumberElement, CardExpiryElement, CardCvcElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import type { RootState, AppDispatch } from "../../../store/store";
 import { addPayment } from "../../../slices/paymentSlice";
-import { removeFromCart, updateItemQuantity } from "../../../slices/cartSlice";
+import {
+    clearCart,
+    fetchCart,
+    removeFromCart,
+    saveCart,
+    updateItemQuantity,
+    increaseQuantity,
+    decreaseQuantity,
+    updateCartItem
+} from "../../../slices/cartSlice";
 import { getUserFromToken, isTokenExpired } from "../../../auth/auth.ts";
 import { useNavigate } from "react-router-dom";
 
 const stripePromise = loadStripe("pk_test_51R6ZgFKiBxldEfFS2fX0YC3riyZE1M5C8oFqG239MAcBiLl6TqyoKtzPsqiiXEV5ilYkqRYHvn8hnvqY5EdNfR8L00weOUntYV");
+
 
 const CheckoutForm = ({ totalAmount }: { totalAmount: number }) => {
     const stripe = useStripe();
@@ -173,21 +183,51 @@ export function ShoppingCart() {
     const { items } = useSelector((state: RootState) => state.cart);
     const dispatch = useDispatch<AppDispatch>();
 
+    useEffect(() => {
+        const authToken = localStorage.getItem("token");
+        if (authToken) {
+            const userData = getUserFromToken(authToken);
+            const userId = userData.userId;
+            console.log("Fetching cart for user:", userId, "with token:", authToken, "userData:", userData);
+            dispatch(fetchCart(userId));
+            console.log("Cart fetched successfully for user:", userId);
+        }
+    }, [dispatch]);
+
+
+
     const totalAmount = items.reduce(
         (total, item) => total + item.product.price * item.itemCount,
         0
     );
 
-    const handleRemoveItem = (productId: string) => {
-        dispatch(removeFromCart(productId));
-    };
-
-    const handleUpdateQuantity = (productId: string, newQuantity: number) => {
-        if (newQuantity > 0) {
-            dispatch(updateItemQuantity({ productId, quantity: newQuantity }));
+    const handleRemoveItem = async (productId: string) => {
+        const authToken = localStorage.getItem("token");
+        if (!authToken) {
+            console.error("Auth token is missing.");
+            return;
         }
+
+        const userData = getUserFromToken(authToken);
+        const userId = userData?.userId;
+
+        if (!userId || !productId) {
+            console.error("User ID or Product ID is undefined.");
+            return;
+        }
+
+        // Dispatch the removeFromCart action
+        await dispatch(removeFromCart({ userId, productId }));
+
+        // Fetch the updated cart
+        dispatch(fetchCart(userId));
     };
 
+    const handleUpdateQuantity = (productId: string,newQuantity:number) => {
+       if (newQuantity < 0) {
+          dispatch(removeFromCart(productId));
+       }
+    };
     return (
         <div className="p-4">
             <h1 className="text-4xl font-bold mb-4 font-sans bg-gradient-to-r from-blue-500 to-green-400">Shopping Cart</h1>
@@ -202,40 +242,69 @@ export function ShoppingCart() {
                 </tr>
                 </thead>
                 <tbody>
-                {items.map((item) => (
-                    <tr key={item.product.id} className="border-b hover:bg-green-100">
-                        <td className="px-6 py-4 text-m">{item.product.name}</td>
-                        <td className="px-6 py-4 text-m">
-                            {item.product.price} {item.product.currency}
-                        </td>
-                        <td className="px-6 py-4 text-m flex items-center">
-                            <button
-                                className="px-2 py-1 bg-gray-300 rounded hover:bg-gray-400"
-                                onClick={() => handleUpdateQuantity(item.product.id, item.itemCount - 1)}
-                            >
-                                -
-                            </button>
-                            <span className="mx-2">{item.itemCount}</span>
-                            <button
-                                className="px-2 py-1 bg-gray-300 rounded hover:bg-gray-400"
-                                onClick={() => handleUpdateQuantity(item.product.id, item.itemCount + 1)}
-                            >
-                                +
-                            </button>
-                        </td>
-                        <td className="px-6 py-4 text-m">
-                            {(item.product.price * item.itemCount).toFixed(2)} {item.product.currency}
-                        </td>
-                        <td className="px-6 py-4 text-m">
-                            <button
-                                className="text-red-500 hover:text-red-700"
-                                onClick={() => handleRemoveItem(item.product.id)}
-                            >
-                                🗑️
-                            </button>
-                        </td>
-                    </tr>
-                ))}
+                {items.map((item) => {
+                    if (!item || !item.product) {
+                        console.error("Invalid item:", item);
+                        return null;
+                    }
+                    return (
+                        <tr key={item.product.id}>
+                            <td>{item.product.name}</td>
+                            <td className="px-6 py-4 text-m">
+                                {item.product.price} {item.product.currency}
+                            </td>
+                            <td className="px-6 py-4 text-m flex items-center">
+                                <button
+                                    onClick={async () => {
+                                        const newQuantity = item.itemCount - 1;
+                                        if (newQuantity >= 0) {
+                                            const authToken = localStorage.getItem("token");
+                                            if (authToken) {
+                                                const userData = getUserFromToken(authToken);
+                                                const userId = userData.userId;
+
+                                                await dispatch(updateCartItem({
+                                                    userId,
+                                                    productId: item.product.id,
+                                                    quantity: newQuantity,
+                                                }));
+                                                await dispatch(fetchCart(userId)); // Fetch updated cart
+                                            }
+                                        }
+                                    }}
+                                >
+                                    -
+                                </button>
+                                <span className="mx-2">{item.itemCount}</span>
+                                <button
+                                    onClick={async () => {
+                                        const newQuantity = item.itemCount + 1;
+                                        const authToken = localStorage.getItem("token");
+                                        if (authToken) {
+                                            const userData = getUserFromToken(authToken);
+                                            const userId = userData.userId;
+
+                                            await dispatch(updateCartItem({
+                                                userId,
+                                                productId: item.product.id,
+                                                quantity: newQuantity,
+                                            }));
+                                            await dispatch(fetchCart(userId)); // Fetch updated cart
+                                        }
+                                    }}
+                                >
+                                    +
+                                </button>
+                            </td>
+                            <td className="px-6 py-4 text-m">
+                                {(item.product.price * item.itemCount).toFixed(2)} {item.product.currency}
+                            </td>
+                            <td className="px-6 py-4 text-m">
+                                <button onClick={() => handleRemoveItem(item.product.id)}>🗑️</button>
+                            </td>
+                        </tr>
+                    );
+                })}
                 </tbody>
             </table>
             <div className="flex justify-between items-center">
@@ -243,7 +312,7 @@ export function ShoppingCart() {
                     Total Amount: {totalAmount.toFixed(2)} {items[0]?.product.currency}
                 </h2>
                 <Elements stripe={stripePromise}>
-                    <CheckoutForm totalAmount={totalAmount} />
+                    <CheckoutForm totalAmount={totalAmount}/>
                 </Elements>
             </div>
         </div>

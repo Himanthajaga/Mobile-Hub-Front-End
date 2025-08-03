@@ -3,6 +3,8 @@ import { Product } from "../../common/product/Product.tsx";
 import { useDispatch, useSelector } from "react-redux";
 import type { AppDispatch, RootState } from "../../../store/store.ts";
 import { getAllProducts } from "../../../slices/productSlice.ts";
+import {getUserFromToken} from "../../../auth/auth.ts";
+import {fetchCart} from "../../../slices/cartSlice.ts";
 
 export function Home() {
     const dispatch = useDispatch<AppDispatch>();
@@ -14,22 +16,40 @@ export function Home() {
     const [maxPrice, setMaxPrice] = useState<number | "">("");
 
     useEffect(() => {
-        dispatch(getAllProducts());
-    }, [dispatch]);
+        const fetchProductsAndCart = async () => {
+            try {
+                const authToken = localStorage.getItem("token");
+                if (!authToken) {
+                    console.error("No auth token found. Unable to fetch products.");
+                    return;
+                }
+                const userData = getUserFromToken(authToken);
+                const userId = userData.userId;
 
+                await dispatch(getAllProducts());
+                await dispatch(fetchCart(userId)); // Fetch updated cart
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            }
+        };
+
+        fetchProductsAndCart();
+    }, [dispatch]);
     // Get unique categories from the product list
     const categories = ["All", ...new Set(list.map((product) => product.category))];
 
     // Filter products based on the selected category, name, and price range
-    const filteredProducts = list.filter((product) => {
-        const matchesCategory =
-            selectedCategory === "All" || product.category === selectedCategory;
-        const matchesName = product.name.toLowerCase().includes(nameFilter.toLowerCase());
-        const matchesPrice =
-            (minPrice === "" || product.price >= minPrice) &&
-            (maxPrice === "" || product.price <= maxPrice);
-        return matchesCategory && matchesName && matchesPrice;
-    });
+    const filteredProducts = list
+        .filter((product) => product && product.id && product.name) // Ensure valid product data
+        .filter((product) => {
+            const matchesCategory =
+                selectedCategory === "All" || product.category === selectedCategory;
+            const matchesName = product.name.toLowerCase().includes(nameFilter.toLowerCase());
+            const matchesPrice =
+                (minPrice === "" || product.price >= minPrice) &&
+                (maxPrice === "" || product.price <= maxPrice);
+            return matchesCategory && matchesName && matchesPrice;
+        });
 
     return (
         <div>
@@ -87,9 +107,12 @@ export function Home() {
 
             {/* Display Filtered Products */}
             <div className="flex flex-wrap justify-center items-center mx-auto">
-                {filteredProducts.map((product) => (
-                    <Product key={product.id} data={product} />
-                ))}
+                {filteredProducts
+                    .filter((product) => product && product.id && product.name) // Ensure valid product data
+                    .map((product) => {
+                        console.log("Rendering product:", product);
+                        return <Product key={product.id} data={product} />;
+                    })}
             </div>
         </div>
     );
