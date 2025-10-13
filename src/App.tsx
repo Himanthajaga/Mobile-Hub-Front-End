@@ -13,12 +13,16 @@ function App() {
     const navigate = useNavigate(); // Define useNavigate
 
     useEffect(() => {
-        const token = localStorage.getItem("token"); // Get token from the local storage
-        if (!token || isTokenExpired(token)) { // Make sure whether token is available or is valid
-            localStorage.removeItem("token"); // Remove token from local storage
-            navigate("/login"); // Redirect to login page
+        const token = localStorage.getItem("token");
+        const publicRoutes = ["/login", "/register", "/sendOtp", "/Reset-password-with-otp"];
+        if (!token || isTokenExpired(token)) {
+            if (!publicRoutes.includes(window.location.pathname)) {
+                localStorage.removeItem("token");
+                navigate("/login");
+            }
         }
     }, [navigate]);
+
 
     return (
         <Routes>

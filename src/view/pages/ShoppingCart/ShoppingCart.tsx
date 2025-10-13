@@ -89,9 +89,13 @@ const CheckoutForm = ({ totalAmount }: { totalAmount: number }) => {
                 };
 
                 await dispatch(addPayment(updatedPaymentData));
+                // Clear the cart in the database
+                await dispatch(clearCart(userId));
 
+                // Fetch the updated cart to ensure the UI reflects the cleared cart
+                await dispatch(fetchCart(userId));
                 alert("Payment successful!");
-                dispatch({ type: "cart/clearCart" });
+                // dispatch({ type: "cart/clearCart" });
                 navigate("/");
                 window.location.reload();
             }

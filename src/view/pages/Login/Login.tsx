@@ -18,7 +18,7 @@ export function Login() {
     const authenticateUser = async (data: FormData) => {
         try {
             const userCredentials = {
-                username: data.username,  // assuming your backend uses "username" for email
+                username: data.username,
                 password: data.password
             };
 
@@ -29,7 +29,7 @@ export function Login() {
             // Check if the user's status is inactive
             if (user.status === "inactive") {
                 alert("You can't log in. Admin has restricted your account.");
-                return; // Stop further execution
+                return;
             }
 
             const accessToken = response.data.accessToken;
@@ -37,16 +37,12 @@ export function Login() {
 
             localStorage.setItem('token', accessToken);
             localStorage.setItem('refreshToken', refreshToken);
-
-
-
             localStorage.setItem('username', user.username as string);
             localStorage.setItem('role', user.role as string);
             localStorage.setItem('userId', user.userId as string);
             localStorage.setItem('image', response.data.user.image as string);
             localStorage.setItem('email', user.email as string);
-            localStorage.setItem('status', user.status || 'active'); // Default to 'active' if status is not set
-
+            localStorage.setItem('status', user.status || 'active');
 
             // Dispatch fetchCart to load cart details
             dispatch(fetchCart(user.userId));
@@ -57,9 +53,21 @@ export function Login() {
             } else if (user.role === 'admin') {
                 navigate('/admin-panel')
             }
-        } catch (error) {
+        } catch (error: any) {
             console.error(error);
-            alert("You can't log in. Admin has restricted your account.");
+            if (error.response) {
+                // Backend responded with an error
+                if (error.response.data?.message === "User is inactive") {
+                    alert("You can't log in. Admin has restricted your account.");
+                } else {
+                    alert(error.response.data?.message || "Login failed. Please check your credentials.");
+                }
+            } else if (error.request) {
+                // Network error (CORS, server down, etc.)
+                alert("Network error: Unable to reach server. Please try again later.");
+            } else {
+                alert("An unexpected error occurred.");
+            }
         }
     };
 
@@ -77,12 +85,13 @@ export function Login() {
                 </div>
                 <form className="space-y-6" onSubmit={handleSubmit(authenticateUser)}>
                     <div>
-                        <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+                        <label htmlFor="username" className="block text-sm font-medium text-gray-700">
                             Email
                         </label>
                         <input
                             type="text"
                             id="username"
+                            autoComplete="username"
                             {...register("username")}
                             className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
                             placeholder="username"
@@ -96,6 +105,7 @@ export function Login() {
                         <input
                             type="password"
                             id="password"
+                            autoComplete="current-password"
                             {...register("password")}
                             className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
                             placeholder="••••••••"
